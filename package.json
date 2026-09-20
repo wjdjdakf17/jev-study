@@ -1,0 +1,21 @@
+{
+  "name": "jev-study",
+  "version": "0.1.0",
+  "description": "Jev(TypeSafe AI의 System One Model)에 대한 개인 스터디 — 개념 정리 + TypeScript 타이핑 + 목업 워크플로우 실험",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "example": "tsx examples/ticket-routing.ts",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
