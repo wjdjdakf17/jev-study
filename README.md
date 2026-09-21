@@ -23,15 +23,15 @@ Jev는 **판단만 한다** — 미리 정의된 선택지·척도·명제에 �
 | `src/types.ts` | 질문 3종(Choice/Score/Noul)·결정·confidence를 TypeScript 타입으로 모델링 |
 | `src/client.ts` | `DecisionClient` 인터페이스 + 결정론적 목업 구현 |
 | `src/workflow.ts` | **confidence-gated routing** — 확률을 소비하는 if문 패턴 |
-| `src/calibration.ts` | 보정 측정 도구 — Brier score, 신뢰도 버킷 |
-| `tests/` | 26개 테스트 (타입 계산 / 목업 계약 / 정책 / 보정 수학) |
+| `src/calibration.ts` | 보정 측정 도구 — Brier score, 신뢰도 버킷, ECE |
+| `tests/` | 31개 테스트 (타입 계산 / 목업 계약 / 정책 / 보정 수학 / 셔플드 컨텍스트 컨트롤) |
 
 ## 빠른 시작
 
 ```bash
 git clone https://github.com/wjdjdakf17/jev-study && cd jev-study
 npm install
-npm test        # 26 tests
+npm test        # 31 tests
 npm run example # 티켓 3종 라우팅 데모
 ```
 
@@ -51,6 +51,7 @@ npm run example # 티켓 3종 라우팅 데모
 3. [LLM과의 비교](docs/03-llm-vs-system-one.md) — RLHF/RLVR/RLCD, 문자열을 포기한다는 것, 경쟁이 아니라 분업
 4. [어디에 쓸까, 한계는](docs/04-use-cases-limits.md) — 스마트 if문·실시간 데모들, 공식 limitations, 비판적으로 읽기
 5. [참고자료](docs/05-references.md) — 1차 소스와 코드-개념 대응표
+6. [오픈소스 구현 해부 — jevlike](docs/06-jevlike-open-implementation.md) — 옵션-어텐션 아키텍처, ECE·셔플드 컨텍스트 컨트롤 평가법, 100배 속도의 독립 정황 증거
 
 ## 핵심 요약 (내 3줄)
 

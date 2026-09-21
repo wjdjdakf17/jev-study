@@ -22,6 +22,7 @@
 | Requesty 딥다이브 (질문 유형/프라이싱/한계 정리) | https://www.requesty.ai/blog/typesafe-jev-explained |
 | Hacker News 토론 (~1,900점) | https://news.ycombinator.com/item?id=49717558 |
 | LangChain 블로그 (LLM 앱에 끼칠 영향) | https://blog.langchain.com |
+| jevlike — 같은 입출력 계약의 독립 오픈소스 구현 (Python, [해부 노트](06-jevlike-open-implementation.md)) | https://github.com/vinnylarouge/jevlike |
 
 ## 커뮤니티 데모 (발표 직후, 자체 측정)
 
@@ -40,7 +41,8 @@
 | `src/types.ts` — confidenceFromDistribution | confidence = 분포에서 도출하는 요약치 |
 | `src/client.ts` — DecisionClient.decide({state, questions}) | 하나의 state에 대한 병렬 질의 |
 | `src/workflow.ts` — routeTicket | confidence-gated routing 패턴 |
-| `src/calibration.ts` — brierScore / reliabilityBuckets | 보정(calibration)의 독립 검증 |
+| `src/calibration.ts` — brierScore / reliabilityBuckets / ece | 보정(calibration)의 독립 검증 |
+| `tests/client.test.ts` — 셔플드 컨텍스트 컨트롤 테스트 | jevlike의 평가 방법론 시연 |
 
 ## 각주
 
