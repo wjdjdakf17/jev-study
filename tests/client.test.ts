@@ -102,6 +102,38 @@ describe("MockDecisionClient", () => {
     expect(refund.probabilityOfYes).toBeLessThanOrEqual(1);
   });
 
+  it("셔플드 컨텍스트 컨트롤: 맞는 state의 confidence가 섞인 state보다 높다", async () => {
+    // 오픈소스 구현 jevlike의 평가 방법론 — 각 질문(메뉴)에 엉뚱한
+    // context를 짝지어도 모델이 그 컨트롤을 "이겨야" 학습된 것이다.
+    // 목업에 같은 잣대를 적용해 보는 시연 테스트.
+    const client = new MockDecisionClient();
+    const question: Question = {
+      kind: "choice",
+      key: "route",
+      question: "이 티켓을 처리할 팀은?",
+      options: ["billing", "technical", "account"],
+    };
+
+    // 정상 짝: 결제 티켓 + 라우팅 질문 → 높은 confidence
+    const matched = await client.decide({
+      state: { subject: "이중 결제", body: "카드로 구독 결제가 두 번 청구됐습니다." },
+      questions: [question],
+    });
+    // 컨트롤: 라우팅과 무관한 state를 짝지었을 때 → 분포가 평평해짐
+    const shuffled = await client.decide({
+      state: { subject: "주말 날씨", body: "주말 행사 일정 문의입니다." },
+      questions: [question],
+    });
+
+    const matchedRoute = matched["route"];
+    const shuffledRoute = shuffled["route"];
+    if (matchedRoute?.kind !== "choice" || shuffledRoute?.kind !== "choice") {
+      throw new Error("choice 결정이어야 함");
+    }
+
+    expect(matchedRoute.confidence).toBeGreaterThan(shuffledRoute.confidence);
+  });
+
   it("질문 여러 개를 한 번의 호출에 섞어 쓸 수 있다 (병렬 질의 형태)", async () => {
     const client = new MockDecisionClient();
     const scoreQuestion: Question = {

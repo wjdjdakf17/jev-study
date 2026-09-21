@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { brierScore, reliabilityBuckets } from "../src/calibration.js";
+import { brierScore, ece, reliabilityBuckets } from "../src/calibration.js";
 
 describe("brierScore", () => {
   it("확신하고 모두 맞추면 0", () => {
@@ -75,5 +75,45 @@ describe("reliabilityBuckets", () => {
     // 0.0 구간 하나만 존재해야 한다.
     expect(buckets.length).toBe(1);
     expect(buckets[0]?.range[0]).toBe(0);
+  });
+});
+
+describe("ece (Expected Calibration Error)", () => {
+  it("완벽히 보정된 예측은 0 — 0.9 확신이 실제로 90% 맞는 경우", () => {
+    const predictions = Array.from({ length: 10 }, (_, i) => ({
+      predicted: 0.9,
+      outcome: (i < 9 ? 1 : 0) as 0 | 1,
+    }));
+    expect(ece(predictions)).toBe(0);
+  });
+
+  it("과신된 예측은 gap만큼 벌점 — 0.95 확신인데 절반만 맞으면 0.45", () => {
+    const predictions = Array.from({ length: 10 }, (_, i) => ({
+      predicted: 0.95,
+      outcome: (i < 5 ? 1 : 0) as 0 | 1,
+    }));
+    expect(ece(predictions)).toBeCloseTo(0.45, 3);
+  });
+
+  it("버킷 크기로 가중된다 — 같은 gap이면 샘플 많은 버킷이 ECE를 주도", () => {
+    // 버킷 A(0.8~0.9): 10개, gap 0.1 → 0.9 확신인데 80% 적중 (잘 보정)
+    const wellCalibrated = Array.from({ length: 10 }, (_, i) => ({
+      predicted: 0.9,
+      outcome: (i < 8 ? 1 : 0) as 0 | 1,
+    }));
+    // 버킷 B(0.5~0.6): 30개, gap ≈ 0.217 → 0.55 확신인데 1/3만 적중 (과신)
+    const overconfident = Array.from({ length: 30 }, (_, i) => ({
+      predicted: 0.55,
+      outcome: (i < 10 ? 1 : 0) as 0 | 1,
+    }));
+    const mixed = [...wellCalibrated, ...overconfident];
+
+    // 가중 평균: 10/40 × 0.1 + 30/40 × 0.217 ≈ 0.188
+    expect(ece(mixed)).toBeGreaterThan(0.15);
+    expect(ece(mixed)).toBeLessThan(0.22);
+  });
+
+  it("빈 배열은 0", () => {
+    expect(ece([])).toBe(0);
   });
 });

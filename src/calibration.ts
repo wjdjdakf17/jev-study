@@ -106,6 +106,33 @@ export function reliabilityBuckets(
   return buckets;
 }
 
+/**
+ * ECE(Expected Calibration Error) — 보정의 대표 요약 지표.
+ *
+ *   ECE = Σ (버킷 샘플 수 / 전체) × |버킷 평균 확신 - 버킷 실제 적중률|
+ *
+ * 신뢰도 버킷의 gap을 샘플 수로 가중 평균한 값. 0에 가까울수록 잘 보정됨.
+ * Jev류 모델의 공개 평가(예: 오픈소스 구현 jevlike)가 top-1/top-3와
+ * 함께 찍는 지표이기도 하다 — "확률을 보고하는 모델"에는 정확도만큼
+ * 중요한 숫자다.
+ *
+ * 예: 0.9 구간에서 평균 0.9 확신했는데 실제 적중률이 0.7이면
+ * 그 버킷의 gap은 0.2. ECE는 이 gap들이 전체에서 차지하는 비중만큼 더해진다.
+ */
+export function ece(
+  predictions: readonly BinaryPrediction[],
+  bucketWidth = 0.1,
+): number {
+  const total = predictions.length;
+  if (total === 0) return 0;
+
+  // 버킷별 (비중 × gap)의 합 — reliabilityBuckets의 gap 정의와 동일한 식.
+  return reliabilityBuckets(predictions, bucketWidth).reduce(
+    (acc, bucket) => acc + (bucket.count / total) * bucket.gap,
+    0,
+  );
+}
+
 /** 로그에 찍기 좋게 반올림. 계산 자체는 원값으로 하는 것과 무관. */
 function round(x: number): number {
   return Math.round(x * 1000) / 1000;
