@@ -10,11 +10,16 @@
 | 경로 | 결과 |
 | --- | --- |
 | TypeSafe 직접 API | 카드 등록 필수, 무료 티어 없음 |
-| TypeSafe 콘솔 플레이그라운드 | 로그인 후 이용 — 손으로 질의하는 용도 |
+| TypeSafe 콘솔 플레이그라운드 | ❌ **로그인해도 크레딧 필요 — 실측 확인** (Run 시 "Billing error: no available TypeSafe API credits") |
 | Requesty 라우터 | 계정 생성 가능하나 이 계정 무료 크레딧 없음 ($0.00) |
 | Vercel AI Gateway | 9/25까지 무료 프로모션 — 종료됨 |
 | Cloudflare Workers AI | Jev 미탑재 (AI Gateway 프록시 얘기였음) |
 | **jevlike 로컬** | **✅ 100% 무료 — 본 문서의 실습 경로** |
+
+> 2026-09-29 현재 "지불 없이 진짜 Jev를 호출하는 경로"는 존재하지 않는다.
+> 학습 목적의 무료 실습은 jevlike로 충분하고(본 문서), 진짜 Jev 비교가
+> 필요해지는 순간 TypeSafe 크레딧 또는 Requesty 충전(모두 최소 충전
+> 1회, 실습 규모 비용은 몇 센트 미만)로 3중 비교(목업/로컬/Jev)가 열린다.
 
 ## 한 일
 
