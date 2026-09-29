@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc --noEmit",
     "example": "tsx examples/ticket-routing.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "example:real": "tsx examples/real-jev.ts"
   },
   "engines": {
     "node": ">=20"
