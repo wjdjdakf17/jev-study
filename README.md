@@ -33,7 +33,7 @@ Jev는 **판단만 한다** — 미리 정의된 선택지·척도·명제에 �
 ```bash
 git clone https://github.com/wjdjdakf17/jev-study && cd jev-study
 npm install
-npm test        # 31 tests
+npm test        # 37 tests
 npm run example # 티켓 3종 라우팅 데모
 ```
 
